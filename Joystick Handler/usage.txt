@@ -1,0 +1,10 @@
+Copy :
+
+src/mz700_joystick.h
+src/mz700_joystick.c
+src/joy_read.asm
+
+into you app folder.
+Review the example app how to use.
+When it comes to compiling: zcc +mz -O3 -create-app -o build\myapp src\main.c src\mz700_joystick.c src\joy_read.asm
+
