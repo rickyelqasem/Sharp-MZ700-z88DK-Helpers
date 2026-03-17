@@ -88,6 +88,44 @@ mz700_screen_write_text(0, 0, "HELLO");
 mz700_screen_render_u8(0, 1, x);
 ```
 
+## Quick start for other apps
+
+Use the wrappers as the only interface to MZ-700 input and screen access in your C code.
+
+1. Include the wrapper headers you need:
+
+```c
+#include "mz700_joystick.h"
+#include "mz700_keyboard.h"
+#include "mz700_screen.h"
+```
+
+2. Read input inside your main loop:
+
+```c
+uint8_t joy_x = mz700_joystick1_read_x();
+uint8_t joy_y = mz700_joystick1_read_y();
+uint8_t fire1 = mz700_joystick1_read_fire1();
+char key = mz700_keyboard_read_key();
+```
+
+3. Draw using the screen wrapper:
+
+```c
+mz700_screen_clear();
+mz700_screen_write_text(0, 0, "PLAYER 1");
+mz700_screen_render_u8(0, 1, joy_x);
+```
+
+4. Follow these rules:
+
+- Do not read `0xE000` / `0xE001` / `0xE002` / `0xE008` directly from app code.
+- Do not write `0xD000` / `0xD800` directly from app code unless you also handle bank switching correctly.
+- Do not use `getk()` in a program that also uses the joystick wrapper. Use `mz700_keyboard_read_key()` instead.
+- Treat the wrapper headers as the stable public ABI for this repo.
+
+For a complete usage example, see [src/main.c](/c:/Users/ricky/OneDrive/devwork/8bit%20games/sharp%20mz700/joystick%20test/v1.1/src/main.c) and [src/example_joystick.c](/c:/Users/ricky/OneDrive/devwork/8bit%20games/sharp%20mz700/joystick%20test/v1.1/src/example_joystick.c).
+
 ## Joystick 2 mapping
 
 - `JB1` is joystick 2 X axis
